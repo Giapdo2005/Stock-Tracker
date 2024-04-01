@@ -16,8 +16,6 @@ def read_stock_files(first_name: str, last_name: str) -> list[list[str]]:
         print(f"{file_name} does not exist")
         return []
     
-
-
     
 if __name__ == '__main__':
     stock = read_stock_files("Giap", "Do",) 
