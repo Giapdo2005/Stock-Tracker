@@ -10,7 +10,10 @@ class AlphaVantage():
         self.URL = 'https://www.alphavantage.co/'
             
 
-    def get_closing_price(self,ticker: str):
+    def get_closing_price(self,ticker: str, test: bool=False):
+
+        if test:
+            return 24.00
         URL = f'{self.URL}query?function=TIME_SERIES_DAILY&symbol={ticker}&apikey={self.apikey}'
         
         r = requests.get(URL)
@@ -24,6 +27,7 @@ class AlphaVantage():
             raise err
 
         return closing_price
+    
 
 if __name__ == "__main__":
     AV = AlphaVantage()
