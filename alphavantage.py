@@ -13,7 +13,7 @@ class AlphaVantage():
     def get_closing_price(self,ticker: str, test: bool=False):
 
         if test:
-            return 24.00
+            return 35.00
         URL = f'{self.URL}query?function=TIME_SERIES_DAILY&symbol={ticker}&apikey={self.apikey}'
         
         r = requests.get(URL)
@@ -34,22 +34,4 @@ if __name__ == "__main__":
     print(AV.config['AlphaVantageAPIKey'])
     price = AV.get_closing_price("AAPL")
     print(price)
-
-
-    # stock = cs.read_stock_files("Giap", "Do",) 
-    # tickers = []
-
-    # rows = list(stock)
-    # iterator = iter(rows)
-    # next(iterator)
-    # for i,row in enumerate(rows):
-    #     if i == 0:
-    #         continue
-    #     if row:
-    #         tickers.append(row[0])
-
-    # new_prices = []
-    # for tick in tickers:
-    #     new_prices.append(AV.get_closing_price(tick))
-    # print(new_prices)
 

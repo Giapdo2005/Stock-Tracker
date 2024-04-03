@@ -16,6 +16,20 @@ def read_stock_files(first_name: str, last_name: str) -> list[list[str]]:
         print(f"{file_name} does not exist")
         return []
     
+def get_tickers(first_name: str, last_name: str):
+    stock = read_stock_files(first_name, last_name) 
+    tickers = []
+
+    rows = list(stock)
+    iterator = iter(rows)
+    next(iterator)
+    for i,row in enumerate(rows):
+        if i == 0:
+            continue
+        if row:
+            tickers.append(row[0])
+            
+    return tickers
     
 if __name__ == '__main__':
     stock = read_stock_files("Giap", "Do",) 
