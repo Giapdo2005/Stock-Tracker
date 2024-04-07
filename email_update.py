@@ -4,6 +4,8 @@ from email.mime.text import MIMEText
 import check_stock as cs
 from alphavantage import AlphaVantage
 import csv
+import time
+import schedule 
 
 
 def update_prices(first_name: str, last_name: str, AV: AlphaVantage, test: bool=True):
@@ -33,39 +35,59 @@ def update_prices(first_name: str, last_name: str, AV: AlphaVantage, test: bool=
         writer.writerows(stock)
 
     
-#finish send_update function
 def send_update(first_name: str, last_name: str, user_email):
-    stocks = cs.read_stock_files(first_name, last_name)
-    tickers = get_tickers(first_name, last_name)
-    init_prices = get_initial_price(first_name, last_name)
-    current_prices = get_current_price(first_name)
-    
-    subject = 'Stock Update'
-    body = f'Dear {first_name}, \n\n'\
-            'Here is the latest update on your stocks: \n'\
-           
-    for ticker, init_price, current_price in zip(tickers, init_prices, current_prices):
-       body += f'{ticker}: \n' \
-                f'Initial Price: ${init_price} \n' \
-                f'Current Price: ${current_price}\n\n'
-
-    # Email content
-    message = MIMEMultipart()
-    message['From'] = 'your_email@gmail.com'
-    message['To'] = user_email
-    message['Subject'] = subject
-    message.attach(MIMEText(body, 'plain'))
-
-    # Email server setup
-    server = smtplib.SMTP('smtp.gmail.com', 587)
-    server.starttls()
-    server.login('your_email@gmail.com', 'your_password')  # You should use an app password here for security reasons
-
-    # Send email
-    text = message.as_string()
-    server.sendmail('your_email@gmail.com', user_email, text)
-    server.quit()
+    try:
+        _, *stocks = cs.read_stock_files(first_name, last_name)
         
+        subject = 'Stock Update'
+        body = f'Dear {first_name.title()}, \n\n'\
+                'Here is the latest update on your stocks: \n'\
+            
+        for row in stocks:
+            body += f'{row[0]}: \n' \
+                    f'Initial Price: {row[2]} \n' \
+                    f'Current Price: {row[3]} \n' \
+                    
+                    
+        body += "Your Stock Tracking Team"
+
+        message = MIMEMultipart()
+        message['From'] = 'giapdo1901@gmail.com'
+        message['To'] = user_email
+        message['Subject'] = subject
+        message.attach(MIMEText(body, 'plain'))
+
+        # Email server setup
+        server = smtplib.SMTP('smtp.gmail.com', 587)
+        server.starttls()
+        server.login("giapdo1901@gmail.com", "hxso xque orls aibg")  # You should use an app password here for security reasons
+
+        # Send email
+        text = message.as_string()
+        server.sendmail('giapdo1901@gmail.com', user_email, text)
+        server.quit()
+        print("Email sent successfully")
+    except Exception as e:
+        print(f'Error: {e}')
+
+def automate_update(first_name, last_name, user_email):
+    try:
+        print("Updating Stocks....")
+        schedule.every().day.at("20:00").do(send_update(first_name, last_name, user_email))
+
+    except Exception as e:
+        print(f'Error: {e}')
+    
+    while True:
+        schedule.run_pending()
+        time.sleep(1)
+
+
 if __name__ == '__main__': 
     AV = AlphaVantage()
     update_prices('Giap', 'Do', AV)
+    send_update('giap', 'do', 'giapdo1901@gmail.com')
+
+    users = [
+        ('giap','do','giapdo1901@gmail.com')
+    ]
