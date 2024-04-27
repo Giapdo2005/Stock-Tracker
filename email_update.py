@@ -89,5 +89,15 @@ if __name__ == '__main__':
     send_update('giap', 'do', 'giapdo1901@gmail.com')
 
     users = [
-        ('giap','do','giapdo1901@gmail.com')
+        ('giap', 'do', 'giapdo1901@gmail.com')
     ]
+
+    # Schedule updates for each user
+    for user in users:
+        first_name, last_name, email = user
+        automate_update(first_name, last_name, email)
+
+    # Run scheduler loop to execute scheduled tasks
+    while True:
+        schedule.run_pending()
+        time.sleep(1)
