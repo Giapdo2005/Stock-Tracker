@@ -75,12 +75,13 @@ def automate_update(first_name, last_name, user_email):
         print("Updating Stocks....")
         schedule.every().day.at("20:00").do(send_update(first_name, last_name, user_email))
 
+        while True:
+            schedule.run_pending()
+            time.sleep(1)
+
     except Exception as e:
         print(f'Error: {e}')
     
-    while True:
-        schedule.run_pending()
-        time.sleep(1)
 
 
 if __name__ == '__main__': 
